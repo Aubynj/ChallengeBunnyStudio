@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import Toast from '../Helper/index'
 
 function CreateEditTask(props) {
     console.log(props)
@@ -37,7 +38,12 @@ function CreateEditTask(props) {
         try{
             let response = await axios.post('http://localhost:8000/Task/Update/'+props.match.params.id, data, 
             {headers})
-            console.log(response)
+            if (response.data.success){
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Task updated successfully'
+                })
+            }
         }catch(e) {
             console.log(e)
         }

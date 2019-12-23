@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import TaskCard from './TaskCard'
+import Toast from '../Helper/index'
 import axios from 'axios'
 import _ from 'lodash'
 
@@ -9,10 +10,10 @@ function SingleUserComponent(props) {
     let [description, setDescription ] = useState('')
     let [userTask, setUserTask] = useState([])
 
-
     useEffect(() => {
         fetchUsername()
         fetchUserTask()
+        
         
         // axios.get('http://localhost:8000/Users/'+props.match.params.id)
         // .then(response => {
@@ -62,8 +63,14 @@ function SingleUserComponent(props) {
         try{
             let response = await axios.post('http://localhost:8000/Task/add', data, {headers})
             console.log(response)
-            setDescription(description = '')
-            fetchUserTask()
+            if (response.data.success){
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Task created successfully'
+                  })
+                setDescription(description = '')
+                fetchUserTask()
+            }
         }catch(e){
             console.log(e)
         }
@@ -73,7 +80,11 @@ function SingleUserComponent(props) {
         console.log(id)
         axios.delete('http://localhost:8000/Task/'+id)
         .then(response => {
-            if (response.data) {
+            if (response.data.success) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                  })
                 fetchUserTask()
             }
         })
@@ -83,7 +94,11 @@ function SingleUserComponent(props) {
     const completeUserTask = data => {
         axios.post('http://localhost:8000/Task/Completed/'+data._id, data)
         .then(response => {
-            if (response.data) {
+            if (response.data.success) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                  })
                 fetchUserTask()
             }
         })

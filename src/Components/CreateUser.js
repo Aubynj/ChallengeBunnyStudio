@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import Toast from '../Helper/index'
 
 function CreateUser() {
     let [username, setUsername] = useState('')
@@ -19,10 +20,24 @@ function CreateUser() {
     async function createUserData(data, headers){
         try{
             let response = await axios.post('http://localhost:8000/Users/add', data, {headers})
-            console.log(response)
+            if (response.data.success){
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                  })
+            } else{
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                  })
+            }
             setUsername(username = '')
         }catch(e){
-            console.log(e)
+            console.log(e.message)
+            Toast.fire({
+                icon: 'error',
+                title: `${username} already exist`
+              })
         }
     }
 

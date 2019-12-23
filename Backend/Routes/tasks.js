@@ -52,7 +52,6 @@ router.route('/Completed/:id').post((req, res) => {
     Task.findById(req.params.id)
     .then(task => {
         task.state = !req.body.state
-        console.log(task)
         task.save()
         .then(() => res.json({success : true, message : "Updated Status Successfully"}))
         .catch(err => res.status(400).json(err))

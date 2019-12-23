@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Toast from '../Helper/index'
 
 export default function EditUser(props) {
     let [username, setUsername] = useState('')
@@ -19,7 +20,12 @@ export default function EditUser(props) {
         axios.post('http://localhost:8000/Users/update/'+props.match.params.id, userData)
         .then(response => {
             // SUCCESSFUL UPDATE
-            console.log(response)
+            if (response.data.success){
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                  })
+            }
         })
         .catch(err => {console.log(err)})
     }

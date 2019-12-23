@@ -1,25 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import UserlistComponent from './UserlistComponent'
 import axios from 'axios'
+import Toast from '../Helper/index'
 
 function UserList() {
     let [users, setUsers] = useState([])
 
     useEffect(() =>{
-        axios.get('http://localhost:8000/Users/')
-        .then(response => {
+        fetchUsers()
+    },[])
+
+    async function fetchUsers(){
+        try {
+            let response = await axios.get('http://localhost:8000/Users/')
             if (response.data.length > 0) {
                 setUsers(users = response.data)
             }
-        })
-        .catch(err => console.log(err))
-    },[])
+        }catch(e){
+            console.log(e)
+        }
+    }
 
     const deleteUser = (id) => {
         axios.delete('http://localhost:8000/Users/'+id)
         .then(response => {
             // Successful user delete
-            
+            if (response.data.success){
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                })
+                fetchUsers()
+            }
         })
         .catch(err => console.log(err))
     }
