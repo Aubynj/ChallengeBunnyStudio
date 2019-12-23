@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,41 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+.push-down{
+  margin-top: 50px
+}
+.links{
+  text-decoration: none;
+}
+button .link:hover{
+  text-decoration: none;
+}
+.username-link, .username-link:hover{
+  text-decoration: none;
+}
+
+.card{
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px #eeee;
+}
+.no-user-text{
+  text-align: center;
+  color: #ccc;
+  font-size: 20px;
+  margin-top: 10px;
+}
+.no-user-parent{
+  /* width: 100%; */
+}
+.not-completed{
+  background-color: red;
+  padding: 0px;
+  width: 11%;
+}
+.completed{
+  background-color: rgb(109, 221, 44);
+  padding: 0px;
+  width: 11%;
 }

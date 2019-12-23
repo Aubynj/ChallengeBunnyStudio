@@ -23,4 +23,54 @@ router.route('/add').post((req, res) => {
     .catch((err) => res.status(400).json({success : false, message : err}))
 })
 
+router.route('/Single/:id').get((req, res) => {
+    Task.findById(req.params.id)
+    .then(task => res.json(task))
+    .catch(err => res.status(400).json(err))
+})
+
+router.route('/:id').delete((req, res) => {
+    Task.findByIdAndDelete(req.params.id)
+    .then(() => res.json({success : true, message : "Deleted Successfully"}))
+    .catch((err) => res.status(400).json({success : false, message : err}))
+})
+
+router.route('/Update/:id').post((req, res) => {
+    Task.findById(req.params.id)
+    .then(task => {
+        task.description = req.body.description
+        
+        task.save()
+        .then(() => res.json({success : true, message : "Updated Successfully"}))
+        .catch(err => res.status(400).json(err))
+    })
+    .catch(err => res.status(400).json(err))
+})
+
+router.route('/Completed/:id').post((req, res) => {
+    // const newStatus = !req.body.state
+    Task.findById(req.params.id)
+    .then(task => {
+        task.state = !req.body.state
+        console.log(task)
+        task.save()
+        .then(() => res.json({success : true, message : "Updated Status Successfully"}))
+        .catch(err => res.status(400).json(err))
+    })
+    .catch(err => res.status(400).json(err))
+})
+
+router.route('/:id').get((req, res) => {
+    let regex = new RegExp(req.params.user_id, "i"),
+    query = { user_id: regex };
+    Task.find(query, (err, doc) => {
+        if (doc) {
+            res.json(doc)
+        }else if (err){
+            console.log(err)
+        }
+    })
+})
+
+
 module.exports = router
