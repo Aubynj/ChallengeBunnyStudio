@@ -1,8 +1,13 @@
+![alt text](https://github.com/Aubynj/ChallengeBunnyStudio/blob/master/screenshot.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Projects Structure
 
 Initial folder is the Frontend Application. Whiles the Backend Application can be found in Frontend Directory
+
+### `yarn install`
+For all the Backend and Fontend, dependencies need to be install for both folders with the command above
 
 ### `npm start-dev`
 In the Backend Folder, run Command for Starting the Development Server of the Backend
