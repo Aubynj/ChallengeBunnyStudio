@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import Toast from '../Helper/index'
+import { connect } from 'react-redux'
+import {updateUser} from '../Redux/Action/action'
 
-export default function EditUser(props) {
+function EditUser(props) {
     let [username, setUsername] = useState('')
 
     useEffect(() => {
@@ -10,24 +11,14 @@ export default function EditUser(props) {
         .then(response => {
             setUsername(username = response.data.username)
         })
-    }, [])
+    }, [props.match.params.id])
 
     const onSubmit = e => {
         e.preventDefault()
         const userData = {
             username
         }
-        axios.post('http://localhost:8000/Users/update/'+props.match.params.id, userData)
-        .then(response => {
-            // SUCCESSFUL UPDATE
-            if (response.data.success){
-                Toast.fire({
-                    icon: 'success',
-                    title: response.data.message
-                  })
-            }
-        })
-        .catch(err => {console.log(err)})
+        props.updateUser(props.match.params.id, userData)
     }
 
     return (
@@ -55,3 +46,11 @@ export default function EditUser(props) {
         </div>
     )
 }
+
+const mapDispatchToProps = dispatch => {
+    return{
+        updateUser: (id, userdata) => dispatch(updateUser(id, userdata)),
+
+    }
+}
+export default connect(null, mapDispatchToProps)(EditUser)

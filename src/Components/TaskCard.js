@@ -1,8 +1,12 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Link } from 'react-router-dom'
 
 function TaskCard(props) {
-    console.log(props)
+
+    useEffect(() => {
+        localStorage.setItem('extra', props.task.user_id)
+    }, [props.task.user_id])
+    
     return (
         <div className="card mb-2">
             <div className="card-body">
@@ -16,8 +20,8 @@ function TaskCard(props) {
                         }
                     }} 
                 className="btn btn-warning">Edit</Link>&nbsp;
-                <button onClick={() => props.deleteTask(props.task._id)} className="btn btn-danger">Delete</button>&nbsp;
-                { props.task.state === true ? <button onClick={() => props.completeTask(props.task)}className="btn btn-primary">InComplete</button> : 
+                <button onClick={() => props.deleteTask(props.task._id, props.task.user_id)} className="btn btn-danger">Delete</button>&nbsp;
+                { props.task.state === true ? <button onClick={() => props.completeTask(props.task)}className="btn btn-primary">Set InComplete</button> : 
                 <button onClick={() => props.completeTask(props.task)} className="btn btn-success">Complete</button> }
             </div>
         </div>

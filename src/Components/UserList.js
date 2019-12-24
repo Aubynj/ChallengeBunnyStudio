@@ -1,40 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import UserlistComponent from './UserlistComponent'
-import axios from 'axios'
-import Toast from '../Helper/index'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { fetchUsers, deleteUser } from '../Redux/Action/action'
 
-function UserList() {
-    let [users, setUsers] = useState([])
+function UserList(props) {
+    const {fetchUsers, deleteUser} = props
 
     useEffect(() =>{
         fetchUsers()
-    },[])
-
-    async function fetchUsers(){
-        try {
-            let response = await axios.get('http://localhost:8000/Users/')
-            if (response.data.length > 0) {
-                setUsers(users = response.data)
-            }
-        }catch(e){
-            console.log(e)
-        }
-    }
-
-    const deleteUser = (id) => {
-        axios.delete('http://localhost:8000/Users/'+id)
-        .then(response => {
-            // Successful user delete
-            if (response.data.success){
-                Toast.fire({
-                    icon: 'success',
-                    title: response.data.message
-                })
-                fetchUsers()
-            }
-        })
-        .catch(err => console.log(err))
-    }
+    }, [fetchUsers])  
 
     return (
         <div className="container push-down">
@@ -50,18 +25,34 @@ function UserList() {
                             </tr>
                         </thead>
                         <tbody>
-                            {   users.length > 0 ?
-                                users.map(userlist =>{
+                            {   props.users_all.length > 0 ?
+                                props.users_all.map(userlist =>{
                                     return <UserlistComponent user={userlist} deleteUser={deleteUser} key={userlist._id}/>
                                 }) : null
                                     
                             }
                         </tbody>
                     </table>
+                    {
+                        props.users_all.length < 1 ? <h3 className='no-user-text'>No User added yet</h3> : null
+                    }
                 </div>
                 <div className="col-md-2"></div>
             </div>
         </div>
     )
 }
-export default UserList
+
+const mapStateToProps = (state) => {
+    return {
+        users_all : state.users.users
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchUsers : () => dispatch(fetchUsers()),
+        deleteUser : (id) => dispatch(deleteUser(id))
+    }
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserList))

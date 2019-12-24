@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import axios from 'axios'
-import Toast from '../Helper/index'
+import { connect } from 'react-redux'
+import { createUserData } from '../Redux/Action/action'
 
-function CreateUser() {
+function CreateUser(props) {
     let [username, setUsername] = useState('')
 
     const onSubmit = e => {
@@ -14,31 +14,8 @@ function CreateUser() {
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
-        createUserData(User, headers)
-    }
-
-    async function createUserData(data, headers){
-        try{
-            let response = await axios.post('http://localhost:8000/Users/add', data, {headers})
-            if (response.data.success){
-                Toast.fire({
-                    icon: 'success',
-                    title: response.data.message
-                  })
-            } else{
-                Toast.fire({
-                    icon: 'error',
-                    title: response.data.message
-                  })
-            }
-            setUsername(username = '')
-        }catch(e){
-            console.log(e.message)
-            Toast.fire({
-                icon: 'error',
-                title: `${username} already exist`
-              })
-        }
+        props.createUserData(User, headers)
+        setUsername(username = '')
     }
 
     return (
@@ -66,4 +43,9 @@ function CreateUser() {
         </div>
     )
 }
-export default CreateUser
+const mapDispatchToProps = dispatch => {
+    return{
+        createUserData: (user, header) => dispatch(createUserData(user, header))
+    }
+}
+export default connect(null, mapDispatchToProps)(CreateUser)

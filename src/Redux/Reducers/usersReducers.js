@@ -1,7 +1,8 @@
-import { FETCH_USERS } from "../Action/types"
+import { FETCH_USERS, FETCH_SINGLE_USERNAME } from "../Action/types"
 
 const intialState = {
-    users : []
+    users : [],
+    user : ''
 }
 
 const usersReducers = (state = intialState, action) => {
@@ -10,6 +11,11 @@ const usersReducers = (state = intialState, action) => {
             return {
                 ...state,
                 users : action.payload
+            }
+        case FETCH_SINGLE_USERNAME:
+            return {
+                ...state,
+                user : action.payload
             }
         default:
             return state

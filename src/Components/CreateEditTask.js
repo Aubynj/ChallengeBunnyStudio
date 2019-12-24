@@ -1,17 +1,18 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import axios from 'axios'
-import Toast from '../Helper/index'
+import { connect } from 'react-redux'
+import {fetchUsername, updateUserTask, fetchUserSingleTask} from '../Redux/Action/action'
+
 
 function CreateEditTask(props) {
-    console.log(props)
-    let [username, setUsername] = useState('')
-    let [user_id, setUser_id ] = useState('')
     let [description, setDescription ] = useState('')
-
+    const {fetchUsername, fetchUserSingleTask, updateUserTask} = props
+    
     useEffect(() => {
-        fetchUser()
+        fetchUsername(localStorage.getItem('extra'))
         fetchUserTask()
-    }, [])
+    }, [fetchUsername, fetchUserSingleTask])
+
 
     const onSubmit = e => {
         e.preventDefault()
@@ -22,34 +23,10 @@ function CreateEditTask(props) {
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
-        updateUserTask(data, headers)
+        updateUserTask(props.match.params.id, data, headers)
     }
 
-    async function fetchUser(){
-        try{
-            let response = await axios.get('http://localhost:8000/Users/'+props.location.extraParams.user_id)
-            setUsername(username = response.data.username)
-        }catch(e) {
-            console.log(e)
-        }
-    }
-
-    async function updateUserTask(data, headers){
-        try{
-            let response = await axios.post('http://localhost:8000/Task/Update/'+props.match.params.id, data, 
-            {headers})
-            if (response.data.success){
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Task updated successfully'
-                })
-            }
-        }catch(e) {
-            console.log(e)
-        }
-    }
-
-    async function fetchUserTask(){
+     async function fetchUserTask(){
         try{
             let response = await axios.get('http://localhost:8000/Task/Single/'+props.match.params.id)
             setDescription(description = response.data.description)
@@ -73,7 +50,7 @@ function CreateEditTask(props) {
                         <label>Username</label>
                         <input className="form-control form-control-lg" 
                                 type="text"
-                                value={username}
+                                value={props.user}
                                 required
                                 disabled
                             />
@@ -102,4 +79,17 @@ function CreateEditTask(props) {
         </div>
     )
 }
-export default CreateEditTask
+const mapStateToProps = (state) => {
+    return {
+        user : state.users.user,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return{
+        fetchUsername: (id) => dispatch(fetchUsername(id)),
+        updateUserTask : (param, data, headers) => dispatch(updateUserTask(param, data, headers)),
+        fetchUserSingleTask : (id) => dispatch(fetchUserSingleTask(id))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CreateEditTask)

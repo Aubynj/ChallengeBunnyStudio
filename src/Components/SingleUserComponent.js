@@ -1,50 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import TaskCard from './TaskCard'
-import Toast from '../Helper/index'
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { 
+    fetchUserTask, 
+    fetchUsername, 
+    deleteUserTask, 
+    completeUserTask, 
+    createUserTask  
+} from '../Redux/Action/action'
 import _ from 'lodash'
 
 function SingleUserComponent(props) {
-    let [user, setUser] = useState('')
-    // let [user_id, setUser_id] = useState('')
     let [description, setDescription ] = useState('')
-    let [userTask, setUserTask] = useState([])
+
+    console.log(props)
+
+    const {fetchUserTask, fetchUsername, deleteUserTask, completeUserTask, createUserTask} = props
 
     useEffect(() => {
-        fetchUsername()
-        fetchUserTask()
-        
-        
-        // axios.get('http://localhost:8000/Users/'+props.match.params.id)
-        // .then(response => {
-        //     if (response.data) {
-        //         console.log(response)
-        //         setUser(user = response.data.username)
-        //         // setUser_id(user_id = response.data._id)
-        //     }
-        // })
-        // .catch(err => console.log(err))
+        fetchUserTask(props.match.params.id)
+        fetchUsername(props.match.params.id)
 
-    }, [])
+    }, [fetchUserTask, fetchUsername, props.match.params.id])
 
-    async function fetchUsername(){
-        try {
-            let response = await axios.get('http://localhost:8000/Users/'+props.match.params.id)
-            setUser(user = response.data.username)
-        }catch (e){
-            console.log(e)
-        }
-    }
-
-    async function fetchUserTask(){
-        try{
-            let response = await axios.get('http://localhost:8000/Task/'+props.match.params.id)
-            const taskUser = response.data.filter(todo => todo.user_id === props.match.params.id)
-            setUserTask(userTask = taskUser)
-        }catch(e){
-            console.log(e)
-        }
-    }
 
     const onSubmit = e => {
         e.preventDefault()
@@ -57,67 +35,22 @@ function SingleUserComponent(props) {
             "Content-Type": "application/json",
         }
         createUserTask(Task, headers)
-    }
-
-    async function createUserTask(data, headers){
-        try{
-            let response = await axios.post('http://localhost:8000/Task/add', data, {headers})
-            console.log(response)
-            if (response.data.success){
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Task created successfully'
-                  })
-                setDescription(description = '')
-                fetchUserTask()
-            }
-        }catch(e){
-            console.log(e)
-        }
-    }
-
-    const deleteUserTask = id => {
-        console.log(id)
-        axios.delete('http://localhost:8000/Task/'+id)
-        .then(response => {
-            if (response.data.success) {
-                Toast.fire({
-                    icon: 'success',
-                    title: response.data.message
-                  })
-                fetchUserTask()
-            }
-        })
-        .catch(err => console.log(err))
-    }
-
-    const completeUserTask = data => {
-        axios.post('http://localhost:8000/Task/Completed/'+data._id, data)
-        .then(response => {
-            if (response.data.success) {
-                Toast.fire({
-                    icon: 'success',
-                    title: response.data.message
-                  })
-                fetchUserTask()
-            }
-        })
-        .catch(err => console.log(err))
+        setDescription(description = '')
     }
 
     return (
         <div className="container push-down">
             <div className="row">
                 <div className="col-md-8">
-                    <h4>{_.capitalize(user)} Task Lists</h4>
-                    { userTask.length > 0 ?
-                        userTask.map(task => {
+                    <h4>{_.capitalize(props.user)} Task Lists</h4>
+                    { props.userSingleTask.length > 0 ?
+                        props.userSingleTask.map(task => {
                             return <TaskCard task={task} deleteTask={deleteUserTask} completeTask={completeUserTask} key={task._id}/>
-                        }) : <small>No Available Task for {_.capitalize(user)}</small>
+                        }) : <small>No Available Task for {_.capitalize(props.user)}</small>
                     }
                 </div>
                 <div className="col-md-4">
-                <h3>Create {_.capitalize(user)} Task</h3>
+                <h3>Create {_.capitalize(props.user)} Task</h3>
                     <form onSubmit={onSubmit}>
                         <div className="form-group">
                         <label>Username</label>
@@ -127,7 +60,7 @@ function SingleUserComponent(props) {
                             disabled
                             value = {props.match.params.id}>
                             >
-                            <option>{user}</option>
+                            <option>{props.user}</option>
                         </select>
                         </div>
                         <div className="form-group">
@@ -148,4 +81,24 @@ function SingleUserComponent(props) {
         </div>
     )
 }
-export default SingleUserComponent
+
+const mapStateToProps = (state) => {
+    return {
+        userSingleTask : state.tasks.userTasks,
+        user : state.users.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return{
+        fetchUserTask: (id) => dispatch(fetchUserTask(id)),
+        fetchUsername: (id) => dispatch(fetchUsername(id)),
+        completeUserTask : (data, id) => dispatch(completeUserTask(data, id)),
+        deleteUserTask : (id, user_id) => dispatch(deleteUserTask(id, user_id)),
+        createUserTask : (data, header) => dispatch(createUserTask(data, header))
+    }
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleUserComponent)
