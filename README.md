@@ -9,7 +9,7 @@ Initial folder is the Frontend Application. Whiles the Backend Application can b
 ### `yarn install`
 For all the Backend and Fontend, dependencies need to be install for both folders with the command above
 
-### `npm start-dev`
+### `npm start`
 In the Backend Folder, run Command for Starting the Development Server of the Backend
 Whiles Backend Server is running, proceed to next command
 
