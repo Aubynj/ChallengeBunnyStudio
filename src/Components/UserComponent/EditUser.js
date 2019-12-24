@@ -1,21 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { connect } from 'react-redux'
-import { createUserData } from '../Redux/Action/action'
+import {updateUser} from '../../Redux/Action/action'
 
-function CreateUser(props) {
+function EditUser(props) {
     let [username, setUsername] = useState('')
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/Users/'+props.match.params.id)
+        .then(response => {
+            setUsername(username = response.data.username)
+        })
+    }, [props.match.params.id])
 
     const onSubmit = e => {
         e.preventDefault()
-        const User = {
+        const userData = {
             username
         }
-        const headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-        }
-        props.createUserData(User, headers)
-        setUsername(username = '')
+        props.updateUser(props.match.params.id, userData)
     }
 
     return (
@@ -23,7 +26,7 @@ function CreateUser(props) {
             <div className="row">
                 <div className="col-md-3"></div>
                 <div className="col-md-6">
-                    <h3>Create New User</h3><br/>
+                    <h3>Edit User</h3><br/>
                     <form onSubmit={onSubmit}>
                         <div className="form-group">
                             <input className="form-control form-control-lg" 
@@ -34,7 +37,7 @@ function CreateUser(props) {
                              />
                         </div>
                         <div className="form-group">
-                        <button type="submit" className="btn btn-primary btn-lg">Create User</button>
+                        <button type="submit" className="btn btn-primary btn-lg">Update User</button>
                         </div>
                     </form>
                 </div>
@@ -43,9 +46,11 @@ function CreateUser(props) {
         </div>
     )
 }
+
 const mapDispatchToProps = dispatch => {
     return{
-        createUserData: (user, header) => dispatch(createUserData(user, header))
+        updateUser: (id, userdata) => dispatch(updateUser(id, userdata)),
+
     }
 }
-export default connect(null, mapDispatchToProps)(CreateUser)
+export default connect(null, mapDispatchToProps)(EditUser)

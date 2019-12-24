@@ -1,15 +1,15 @@
 import React from 'react'
 // import logo from './logo.svg'
 import './App.css'
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Navbar from './Components/Navbar'
+import { BrowserRouter as Router, Route } from "react-router-dom"
+import Navbar from './Components/NavbarComponent/Navbar'
 import { Provider } from 'react-redux'
 import Store from './Redux/Store'
-import CreateUser from './Components/CreateUser'
-import CreateEditTask from './Components/CreateEditTask'
-import UserList from './Components/UserList'
-import SingleUserComponent from './Components/SingleUserComponent';
-import EditUser from './Components/EditUser';
+import CreateUser from './Components/UserComponent/CreateUser'
+import CreateEditTask from './Components/TaskComponent/CreateEditTask'
+import UserList from './Components/UserComponent/UserList'
+import SingleUserComponent from './Components/UserComponent/SingleUserComponent'
+import EditUser from './Components/UserComponent/EditUser'
 
 function App() {
     return (

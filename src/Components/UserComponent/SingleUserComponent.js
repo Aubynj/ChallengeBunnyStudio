@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import TaskCard from './TaskCard'
+import TaskCard from '../TaskComponent/TaskCard'
 import { connect } from 'react-redux'
 import { 
     fetchUserTask, 
@@ -7,7 +7,7 @@ import {
     deleteUserTask, 
     completeUserTask, 
     createUserTask  
-} from '../Redux/Action/action'
+} from '../../Redux/Action/action'
 import _ from 'lodash'
 
 function SingleUserComponent(props) {

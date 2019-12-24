@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import UserlistComponent from './UserlistComponent'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { fetchUsers, deleteUser } from '../Redux/Action/action'
+import { fetchUsers, deleteUser } from '../../Redux/Action/action'
 
 function UserList(props) {
     const {fetchUsers, deleteUser} = props

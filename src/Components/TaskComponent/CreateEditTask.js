@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import {fetchUsername, updateUserTask, fetchUserSingleTask} from '../Redux/Action/action'
+import {fetchUsername, updateUserTask, fetchUserSingleTask} from '../../Redux/Action/action'
 
 
 function CreateEditTask(props) {
