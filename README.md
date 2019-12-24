@@ -1,3 +1,5 @@
+![alt text](https://github.com/Aubynj/ChallengeBunnyStudio/blob/master/screenshot.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Projects Structure
