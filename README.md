@@ -23,3 +23,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 For database to run correctly, i have added an environmental variables call .env which will connect the
 application to a mongoDB Server.
 But for security reasons, i have removed the password. Password will be send into your email
+
+### Live Server
+Click [https://bunnystudiotest.herokuapp.com](here)
