@@ -25,4 +25,4 @@ application to a mongoDB Server.
 But for security reasons, i have removed the password. Password will be send into your email
 
 ### Live Server
-Click [https://bunnystudiotest.herokuapp.com](here)
+Click [here](https://bunnystudiotest.herokuapp.com)
